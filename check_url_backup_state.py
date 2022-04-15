@@ -12,10 +12,16 @@ def check_url_backup(url):
     try:
         check_data = requests.get(_full_url).json()
     except Exception as e:
-        log.logger.error("check_url_success error: %s" % url)
+        log.logger_error("check_url_success error: %s" % url)
         log.logger_error(e)
         return None
-    if check_data["archived_snapshots"]["closest"]["available"]:
+    try:
+        result = check_data["archived_snapshots"]["closest"]["available"]
+    except Exception as e:
+        log.logger_error("check_url_success error: %s" % url)
+        log.logger_error(e)
+        result = False
+    if result:
         log.logger_info("网页已归档：" + url)
         return {url: True}
     else:
