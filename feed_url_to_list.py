@@ -18,11 +18,15 @@ def feed_url_to_list(signal_feed_url):
         log.logger.error("xml_decode error: %s" % signal_feed_url)
         log.logger_error(e)
         return None
-    signal_dict = {
-            "title": root.findall("./channel/title")[0].text,
-            "link": root.findall("./channel/link")[0].text,
-            "data": []
-                   }
+    try:
+        signal_dict = {
+                "title": root.findall("./channel/title")[0].text,
+                "link": root.findall("./channel/link")[0].text,
+                "data": []
+                       }
+    except:
+        log.logger.error("xml_decode error: %s" % signal_feed_url)
+        return None
     log.logger_info("正在获取链接列表：" + signal_dict["title"])
     for item in root.findall('channel/item'):
         work_data = {
