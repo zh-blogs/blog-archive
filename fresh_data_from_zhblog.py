@@ -10,11 +10,11 @@ api_address = os.environ['SITE_API_URL']
 def get_api_save_local():
     # 将api返回的json数据保存在本地
     log.logger_info("开始获取api数据")
-    r = requests.get(api_address)
+    r = requests.get(api_address).json()['data']
     with open(f'dist/data_new.json', 'w', encoding="utf-8") as f:
-        f.write(r.text)
+        f.write(r)
     log.logger_success(f"from api_address get data success")
-    return r.text
+    return r
 
 
 def check_data_len(old_data, new_data):
