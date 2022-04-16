@@ -53,6 +53,8 @@ for i in work_news_list:
     feed_url = i["feed"]
     if feed_url == "":
         write_wait_list(link_url)
+        log.logger_info("feed_url为空，添加到待处理列表")
+        continue
     sig_data = feed_url_to_list(feed_url)
     for j in sig_data["data"]:
         link_url = j["link"]
