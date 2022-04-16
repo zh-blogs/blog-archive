@@ -59,9 +59,7 @@ for i in work_news_list:
         link_title = j["title"]
         if post_url_to_archive(link_url):
             log.logger_info("post_url_to_archive: %s" % link_url)
-        link_url = i["link"]
         log.logger_info("check_link_url: %s" % link_url)
-        link_title = i["title"]
         log.logger_info("check_link_title: %s" % link_title)
         if check_url_backup(link_url):
             signal_all_json["success_data"].append(link_url)
