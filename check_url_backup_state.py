@@ -6,12 +6,16 @@ import time
 
 # mirror_base_url = os.environ['MIRROR_BASE_URL']
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.39"
+}
+
 
 def check_url_backup(url):
     # _full_url = mirror_base_url + "https://archive.org/wayback/available?url=" + url
     _full_url = "https://archive.org/wayback/available?url=" + url
     try:
-        check_data = requests.get(_full_url).json()
+        check_data = requests.get(_full_url, headers=headers).json()
         time.sleep(1)
     except Exception as e:
         log.logger_error("check_url_success error: %s" % url)
