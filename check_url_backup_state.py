@@ -22,8 +22,8 @@ def check_url_backup(url):
         log.logger_error(e)
         result = False
     if result:
-        log.logger_info("网页已归档：" + url)
-        return {url: True}
+        log.logger_info("网页推送成功：" + url)
+        return True, url
     else:
-        log.logger_error("网页归档失败？请检查：" + url)
-        return {url: False}
+        log.logger_error("网页归档失败，请检查: " + url)
+        return False, url

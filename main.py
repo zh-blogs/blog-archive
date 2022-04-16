@@ -31,7 +31,6 @@ if __name__ == '__main__':
             log.logger_info("link_title: %s" % link_title)
             if post_url_to_archive(link_url):
                 log.logger_info("post_url_to_archive: %s" % link_url)
-            time.sleep(0.5)
             link_url = j["link"]
             log.logger_info("check_link_url: %s" % link_url)
             link_title = j["title"]

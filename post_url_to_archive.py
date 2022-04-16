@@ -22,9 +22,9 @@ def post_url_to_archive(url):
         log.logger_error(e)
         return None
     if r.status_code == 200:
-        log.logger_info("成功归档网页：" + url)
-        return True
+        log.logger_info("已查询到网页成功入库！：" + url)
+        return True, url
     else:
         print(r.text)
-        log.logger_error("归档网页失败：" + url)
-        return False
+        log.logger_error("未通过网页入库检查：" + url)
+        return False, url

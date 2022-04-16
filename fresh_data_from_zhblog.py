@@ -1,5 +1,5 @@
 # coding:utf-8
-
+import json
 import requests
 import logger as log
 import os
@@ -35,3 +35,32 @@ def more_data_chose_new(old_data, new_data):
     return chose_data
 
 
+def chose_wait_list_data(new_data_list):
+    if os.path.exists(f'dist/wait_list.json'):
+        log.logger_info("wait_list.json文件存在，开始分析是否存在 feed 数据")
+        with open(f'dist/wait_list.json', 'r', encoding="utf-8") as f:
+            wait_list = f.read()
+    else:
+        wait_list = []
+    work_list = []
+    for i in new_data_list:
+        sig_url = i['url']
+        if sig_url in wait_list:
+            log.logger_info(f"{i['url']} 检测到存在 wait_list.json")
+            if i['feed'] != "":
+                log.logger_info(f"{i['url']} 检测到更新了 feed 数据")
+                work_list.append(i)
+                # FEED 提取出来之后，删除 wait_list.json 中的数据
+                with open(f'dist/wait_list.json', 'r', encoding="utf-8") as f:
+                    wait_list = json.load(f)
+                for j in wait_list:
+                    if j['url'] == sig_url:
+                        wait_list.remove(i)
+                with open(f'dist/wait_list.json', 'r', encoding="utf-8") as f:
+                    data = json.dumps(data)
+                    f.write(data)
+            else:
+                log.logger_info(f"{i['url']} 检测到没有更新 feed 数据")
+        else:
+            log.logger_info(f"{i['url']} 检测到不存在 wait_list.json")
+    return work_list
