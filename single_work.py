@@ -15,7 +15,7 @@ work_news_list = []
 new_data = fd.get_api_save_local()
 if os.path.exists('dist/data_old.json'):
     with open('dist/data_old.json', 'r', encoding='utf-8') as f:
-        old_data = f.read()
+        old_data = json.load(f)
     if not fd.check_data_len("dist/data_old.json", "dist/data_new.json"):
         work_news_list.append(fd.more_data_chose_new(old_data, new_data))
     work_news_list.append(fd.chose_wait_list_data(new_data))
@@ -42,10 +42,11 @@ def write_wait_list(url):
 
 
 for i in work_news_list:
-    link_url = i["link"]
-    link_site_url = urlparse(i["link"]).netloc
+    log.logger_info("开始处理博客：" + i['name'])
+    link_url = i["url"]
+    link_site_url = urlparse(link_url).netloc
     log.logger_info("link_url: %s" % link_url)
-    link_title = i["title"]
+    link_title = i["name"]
     idx = i["idx"]
     log.logger_info("link_title: %s" % link_title)
     signal_all_json = {"link": link_url, "name": link_title, "update_time": get_times(), "idx": idx, "success_data": []}

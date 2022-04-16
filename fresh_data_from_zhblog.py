@@ -12,7 +12,8 @@ def get_api_save_local():
     log.logger_info("开始获取api数据")
     r = requests.get(api_address).json()['data']
     with open(f'dist/data_new.json', 'w', encoding="utf-8") as f:
-        f.write(r)
+        _r = json.dumps(r)
+        f.write(_r)
     log.logger_success(f"from api_address get data success")
     return r
 
