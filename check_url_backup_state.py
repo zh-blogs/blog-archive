@@ -11,6 +11,7 @@ def check_url_backup(url):
     _full_url = "https://archive.org/wayback/available?url=" + url
     try:
         check_data = requests.get(_full_url).json()
+        time.sleep(1)
     except Exception as e:
         log.logger_error("check_url_success error: %s" % url)
         log.logger_error(e)
@@ -22,8 +23,8 @@ def check_url_backup(url):
         log.logger_error(e)
         result = False
     if result:
-        log.logger_info("网页推送成功：" + url)
+        log.logger_info("已查询到网页成功入库！：" + url)
         return True, url
     else:
-        log.logger_error("网页归档失败，请检查: " + url)
+        log.logger_error("未通过网页入库检查：" + url)
         return False, url
