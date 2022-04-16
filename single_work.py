@@ -56,6 +56,12 @@ for i in work_news_list:
         log.logger_info("feed_url为空，添加到待处理列表")
         continue
     sig_data = feed_url_to_list(feed_url)
+    try:
+        sig_data["data"]
+    except TypeError:
+        log.logger_info("feed_url无法获取，添加到待处理列表")
+        write_wait_list(link_url)
+        continue
     for j in sig_data["data"]:
         link_url = j["link"]
         link_title = j["title"]
