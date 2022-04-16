@@ -31,8 +31,7 @@ def feed_url_to_list(signal_feed_url):
     for item in root.findall('channel/item'):
         work_data = {
                 "title": item.findall("./title")[0].text,
-                "link": item.findall("./link")[0].text,
-                "pubDate": item.findall("./pubDate")[0].text
+                "link": item.findall("./link")[0].text
                 }
         signal_dict["data"].append(work_data)
         log.logger_info("成功添加网页：" + work_data["link"])
