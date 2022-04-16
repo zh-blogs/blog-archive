@@ -19,6 +19,8 @@ def check_url_backup(url):
         return None
     try:
         result = check_data["archived_snapshots"]["closest"]["available"]
+        url = check_data["archived_snapshots"]["closest"]["url"]
+        return result, url
     except Exception as e:
         log.logger_error("check_url_success error: %s" % url)
         log.logger_error(e)
