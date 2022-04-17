@@ -1,7 +1,7 @@
 # coding:utf-8
 from loguru import logger
 
-logger.add("./log/file_{time}.log", rotation="2 MB")
+logger.add("./log/file_{time}.log", rotation="20 MB")
 
 
 def logger_error(msg):

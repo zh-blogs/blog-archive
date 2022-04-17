@@ -64,6 +64,3 @@ if __name__ == '__main__':
     all_sites_list = get_all_files('dist/detail')
     site_all_urls = new_page_url(all_sites_list)
     update_works(site_all_urls)
-
-
-

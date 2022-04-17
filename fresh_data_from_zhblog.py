@@ -4,7 +4,7 @@ import requests
 import logger as log
 import os
 
-api_address = os.environ['SITE_API_URL']
+api_address = "https://zhblogs.ohyee.cc/api/blogs?size=-1"
 
 
 def get_api_save_local():
@@ -12,7 +12,7 @@ def get_api_save_local():
     log.logger_info("开始获取api数据")
     r = requests.get(api_address).json()['data']
     with open(f'dist/data_new.json', 'w', encoding="utf-8") as f:
-        _r = json.dumps(r)
+        _r = json.dumps(r, ensure_ascii=False)
         f.write(_r)
     log.logger_success(f"from api_address get data success")
     return r
@@ -58,7 +58,7 @@ def chose_wait_list_data(new_data_list):
                     if j['url'] == sig_url:
                         wait_list.remove(i)
                 with open(f'dist/wait_list.json', 'r', encoding="utf-8") as f:
-                    data = json.dumps(data)
+                    data = json.dumps(wait_list, ensure_ascii=False)
                     f.write(data)
             else:
                 log.logger_info(f"{i['url']} 检测到没有更新 feed 数据")
