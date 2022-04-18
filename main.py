@@ -7,6 +7,7 @@ start_works = "python works_redis.py"
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from get_page_state import get_page_state
 from post_sitemap_to_work import post_sitemap_to_work
 import logger as lg
 from sitemap_check import sitemap_check
@@ -72,6 +73,21 @@ def main(url: str = "icodeq.com"):
         lg.logger.error('params must be a str')
         return {'message': 'Fast API: params must be a str'}
     return get_site_state(url)
+
+
+# get 检查网址归档状态
+@app.get("/page_check", summary="检查单个子页面归档状态", tags=["Check"])
+def main(url: str = "https://icodeq.com/2022/bfdcaafa69d7/"):
+    """
+    提交单个页面， 返回网址是否已经归档成功 \n
+    `:param` 站点页面示例：https://icodeq.com/2022/bfdcaafa69d7/ \n
+    `:return` 解析后的网址列表
+    """
+    lg.logger.info('-' * 20 + '开始记录日志' + '-' * 20)
+    if not isinstance(url, str):
+        lg.logger.error('params must be a str')
+        return {'message': 'Fast API: params must be a str'}
+    return get_page_state(url)
 
 
 # 统计当前网站的状态
