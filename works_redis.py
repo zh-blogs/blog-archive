@@ -23,7 +23,7 @@ while True:
         "sitemap_url": sitemap_url,
         "site_host": sitemap_host,
         "success_data": [],
-        "failed_data": []
+        "checked_down_data": []
     }
     log.logger_info("开始处理博客：" + sitemap_host + "  " + get_times())
     data_list = data["sitemap_list"]
@@ -34,7 +34,12 @@ while True:
             signal_all_json["success_data"].append(j)
             log.logger_success("success_url_backup: %s" % sitemap_url)
         else:
-            signal_all_json["failed_data"].append(j)
+            signal_all_json["checked_down_data"].append(j)
             log.logger_error("failed_url_backup: %s" % sitemap_url)
     log.logger_success("处理博客成功！：" + sitemap_host + "  " + get_times())
+    time.sleep(600)
+    # 等待缓存失效
+    for i in signal_all_json["checked_down_data"]:
+      if check_url_backup(i):
+        signal_all_json["checked_down_data"][signal_all_json["checked_down_data"].index(i)] = i
     r1.set(sitemap_host, json.dumps(signal_all_json))

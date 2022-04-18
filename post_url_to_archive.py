@@ -3,7 +3,6 @@
 import requests
 import logger as log
 from fake_useragent import UserAgent
-from urllib.parse import urlparse
 import time
 
 
@@ -13,9 +12,8 @@ import time
 def post_url_to_archive(url):
     # return True, url
     ua = UserAgent().chrome
-    pure_domain = urlparse(url).netloc
     headers = {"User-Agent": ua}
-    _full_url = "https://web.archive.org/save/" + pure_domain
+    _full_url = "https://web.archive.org/save/" + url
     data = {
         "url": url,
         "capture_outlinks": "on",
