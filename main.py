@@ -1,6 +1,8 @@
 # coding: utf-8
 import subprocess
 
+from post_url_to_archive import post_url_to_archive
+
 start_runner = "python runner.py"
 start_redis = "redis/src/redis-server redis/redis.conf"
 start_works = "python works_redis.py"
@@ -23,6 +25,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/", summary="Home", tags=["HomePage"])
 def main():
@@ -91,6 +94,25 @@ def main(url: str = "https://icodeq.com/2022/bfdcaafa69d7/"):
         lg.logger.error('params must be a str')
         return {'message': 'Fast API: params must be a str'}
     return get_page_state(url)
+
+
+# get 推送单个网页进行归档
+@app.get("/page_archive", summary="将单个网址进行归档", tags=["Archive"])
+def main(url: str = "https://icodeq.com/2022/bfdcaafa69d7/"):
+    """
+    提交单个页面， 尝试将其进行归档推送，并返回查询结果\n
+    但是仍然有延迟，建议不要再次出现重试按钮....\n
+    `:param` 站点页面示例：https://icodeq.com/2022/bfdcaafa69d7/ \n
+    `:return` 解析后的网址列表
+    """
+    lg.logger.info('-' * 20 + '开始记录日志' + '-' * 20)
+    if not isinstance(url, str):
+        lg.logger.error('params must be a str')
+        return {'message': 'Fast API: params must be a str'}
+    if post_url_to_archive(url):
+        lg.logger_info("post_url_to_archive: %s" % url)
+    data = get_page_state(url)
+    return data
 
 
 # 统计当前网站的状态

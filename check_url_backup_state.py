@@ -5,6 +5,7 @@ from fake_useragent import UserAgent
 from post_url_to_archive import post_url_to_archive
 import time
 
+
 # mirror_base_url = os.environ['MIRROR_BASE_URL']
 
 
@@ -34,7 +35,7 @@ def check_url_backup(url, times=0):
         return True
     else:
         if times > 3:
-          return False
+            return False
         log.logger_error("未通过网页入库检查：" + url)
         post_url_to_archive(url)
         times += 1
