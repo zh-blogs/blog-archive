@@ -1,8 +1,6 @@
 # coding: utf-8
 import subprocess
 
-from post_url_to_archive import post_url_to_archive
-
 start_runner = "python runner.py"
 start_redis = "redis/src/redis-server redis/redis.conf"
 start_works = "python works_redis.py"
@@ -11,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from get_page_state import get_page_state
 from post_sitemap_to_work import post_sitemap_to_work
+from post_url_to_archive import post_url_to_archive
 import logger as lg
 from sitemap_check import sitemap_check
 from site_state import get_site_state
@@ -27,7 +26,7 @@ app.add_middleware(
 )
 
 
-@app.get("/", summary="Home", tags=["HomePage"])
+@app.get("/", summary="Home", tags=["HomePage"], include_in_schema=False)
 def main():
     return {"docs": "https://zh-blogs.icodeq.com/docs"}
 
@@ -67,12 +66,16 @@ def main(sitemap: str = "https://icodeq.com/sitemap.xml"):
 
 
 # get 检查网址归档状态
-@app.get("/check", summary="检查网址归档状态", tags=["Check"])
+@app.get("/check", summary="检查域名归档状态", tags=["Check"])
 def main(url: str = "icodeq.com"):
     """
-    提交单个网址的 sitemap 返回解析后的网址列表 \n
+    提交单个域名的 sitemap 返回解析后的网址列表 \n
+    因为缓存原因，个别不准，推荐将失败的去请求一次 `/page_check` 接口来获取最新数据\n
     `:param` 站点域名：示例 `icodeq.com` `www.baidu.com` \n
     `:return` 解析后的网址列表
+    返回数据 code 为： 404 表示该域名未在归档集合中发现
+    返回数据 code 为： 201 表示该域名在归档队列中但为归档完成（或正在归档中）
+    返回数据 code 为： 200 表示该域名归档成功
     """
     lg.logger.info('-' * 20 + '开始记录日志' + '-' * 20)
     if not isinstance(url, str):
@@ -86,6 +89,7 @@ def main(url: str = "icodeq.com"):
 def main(url: str = "https://icodeq.com/2022/bfdcaafa69d7/"):
     """
     提交单个页面， 返回网址是否已经归档成功 \n
+    即中转 `https://archive.org/wayback/available?url=` 的请求 \n
     `:param` 站点页面示例：https://icodeq.com/2022/bfdcaafa69d7/ \n
     `:return` 解析后的网址列表
     """
@@ -120,7 +124,10 @@ def main(url: str = "https://icodeq.com/2022/bfdcaafa69d7/"):
 def main():
     """
     统计当前网站的状态 \n
-    `:return` 解析后的网址列表
+    `:return` 解析后的网址列表\n
+    `all_runner_state` 表示成功提交到归档列表的域名 （下面两个的和 + 正在运行的域名）\n
+    `suc_runner_state` 表示成功归档的域名\n
+    `work_list` 表示在归档等待状态的域名
     """
     lg.logger.info('-' * 20 + '开始记录日志' + '-' * 20)
     return get_runner_state()
