@@ -27,7 +27,10 @@ def sitemap_check(sitemap_url):
     url_list = []
     # 解析xml文件
     for loc in loc_tags:
-        url_list.append(loc.get_text())
+        url_content = loc.get_text()
+        if ".xml" in url_content:
+            url_list.extend(sitemap_check(url_content)["sitemap_list"])
+        url_list.append(url_content)
     site_host = urlparse(sitemap_url).netloc
     data_dict = {
         "message": "SUCCESS",

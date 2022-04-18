@@ -50,6 +50,9 @@ def main(sitemap: str = "https://icodeq.com/sitemap.xml"):
     提交单个网址的 sitemap 返回解析后的网址列表 \n
     若前面的GET请求提交时间少于10分钟，则返回上次解析的结果 \n
     反之，则重新解析 \n
+    若网址已存在于提交队列中，则返回400状态码\n
+    若提交队列中不存在该域名的 SiteMap 则推送该 Sitemap 至 Redis 任务队列\n
+    一般2小时后即可通过 `/check` 接口查询到\n
     `:param` sitemap 网址 \n
     `:return` 解析后的网址列表
     """
