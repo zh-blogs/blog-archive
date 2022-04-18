@@ -4,13 +4,11 @@ import logger as log
 from fake_useragent import UserAgent
 import time
 
-
-
 # mirror_base_url = os.environ['MIRROR_BASE_URL']
 
 
-
 def check_url_backup(url):
+    # return True
     # _full_url = mirror_base_url + "https://archive.org/wayback/available?url=" + url
     ua = UserAgent().chrome
     headers = {"User-Agent": ua}

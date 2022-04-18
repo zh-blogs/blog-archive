@@ -7,11 +7,11 @@ from urllib.parse import urlparse
 import time
 
 
-
 # mirror_base_url = os.environ['MIRROR_BASE_URL']
 
 
 def post_url_to_archive(url):
+    # return True, url
     ua = UserAgent().chrome
     pure_domain = urlparse(url).netloc
     headers = {"User-Agent": ua}
